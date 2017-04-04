@@ -51,3 +51,4 @@ if [ "$NAMESPACE" ]; then
 fi
 
 service aerospike restart
+umount /mnt
