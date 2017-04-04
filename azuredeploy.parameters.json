@@ -3,16 +3,22 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "dnsName": {
-            "value": "UNIQUE_NAME"
+            "value": "GEN-UNIQUE-10"
         },
         "vmUserName": {
             "value": "azureuser"
         },
-        "vmPassword": {
-            "value": "YOUR_PASSWORD"
-        },
         "clusterSize": {
             "value": 3
+        },
+        "vmSize": {
+            "value": "Standard_Gs1"
+        },
+        "customNamespacePath": {
+           "value": "PATH-TO-YOUR-NAMESPACE-FILE"
+        },
+        "sshPubkey": {
+            "value": "CONTENTS-OF-YOUR-SSH-PUBLIC-KEY"
         }
     }
 }

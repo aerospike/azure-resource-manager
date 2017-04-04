@@ -14,12 +14,6 @@
                 "description": "user name to ssh to the VMs"
             }
         },
-        "vmPassword": {
-            "type": "securestring",
-            "metadata": {
-                "description": "password to ssh to the VMs"
-            }
-        },
         "clusterSize": {
             "type": "int",
             "metadata": {
@@ -151,6 +145,20 @@
             "metadata": {
                 "description": "bash script command line"
             }
+        },
+        "customNamespacePath":{
+            "type": "string",
+            "defaultValue": "https://raw.githubusercontent.com/aerospike/azure-resource-manager/master/namespace.conf",
+            "metadata": {
+                "description": "url of your namespace file"
+            }
+        },
+        "sshPubkey": {
+            "type": "string",
+            "defaultValue": "#Insert your SSH pubkey",
+            "metadata": {
+              "description": "Your SSH public key, typically found at ~/.ssh/id_rsa.pub"
+            }
         }
     },
   "variables": {
@@ -161,13 +169,14 @@
     "ipName": "[concat(parameters('dnsName'), '-ip')]",
     "availabilitySetName": "[concat(parameters('dnsName'), '-set')]",
     "customScriptFilePath": "[concat(parameters('artifactsPath'), '/azure_aerospike.sh')]",
-    "customNamespacePath": "[concat(parameters('artifactsPath'),'/namespace.conf')]",
+    "customNamespacePath": "[parameters('customNamespacePath')]",
     "customScriptsDir": "/var/lib/waagent/custom-script/download/0/",
     "virtualNetworkSetupURL": "[concat(parameters('artifactsPath'),'/vnet-',parameters('vnetNewOrExisting'),'.json')]",
     "sa": "[parameters('dbSubnetStartAddress')]",
     "ipOctet01": "[concat(split(variables('sa'), '.')[0], '.', split(variables('sa'), '.')[1], '.')]",
     "ipOctet2": "[int(split(variables('sa'), '.')[2])]",
-    "ipOctet3": "[int(split(variables('sa'), '.')[3])]"
+    "ipOctet3": "[int(split(variables('sa'), '.')[3])]",
+    "sshKeyPath": "[concat('/home/',parameters('vmUserName'),'/.ssh/authorized_keys')]"
   },
     "resources": [
         {
@@ -293,7 +302,17 @@
           "osProfile": {
             "computerName": "[concat(parameters('dnsName'), copyIndex())]",
             "adminUsername": "[parameters('vmUserName')]",
-            "adminPassword": "[parameters('vmPassword')]"
+            "linuxConfiguration": {
+              "disablePasswordAuthentication": "true",
+              "ssh": {
+                "publicKeys": [ 
+                  { 
+                    "path": "[variables('sshKeyPath')]",
+                    "keyData": "[parameters('sshPubkey')]"
+                  }
+                ]
+              }
+            }
           },
           "storageProfile": {
             "imageReference": {
