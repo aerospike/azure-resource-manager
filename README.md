@@ -36,15 +36,15 @@ You can deploy the template with Azure Portal, or PowerShell, or Azure cross pla
   
   * Login by using the `azure login` command.
   ```bash
-  $ azure login
+  $ az login
   ```
   * Next, create a resource group:
   ```bash
-  $ azure group create --name aerospikerg --location "West US"
+  $ az group create --name aerospikerg --location "West US"
   ```
   * Create a deployment:
   ```bash
-  $ azure group deployment create --name aerospikedeployment --resource-group aerospikerg --template-file azuredeploy.json --parameters-file azuredeploy.parameters.json
+  $ az group deployment create --name aerospikedeployment --resource-group aerospikerg --template-file azuredeploy.json --parameters azuredeploy.parameters.json
   ```
 
 **Custom deployment**
