@@ -62,6 +62,7 @@ done
 
 
 if [ "$NAMESPACE" ]; then
+	sed -i '/namespace/,$d' $CONF
 	curl -fs $NAMESPACE >> $CONF
 fi
 
